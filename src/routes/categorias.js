@@ -4,6 +4,8 @@
 
 const { Router } = require("express");
 const { check } = require('express-validator');
+const { crearCategoria } = require("../controllers/categorias");
+const { validarJWT, validarCampos } = require("../middlewares");
 const router = Router();
 
 
@@ -23,11 +25,11 @@ router.get('/:id', (req,res)=>{
 })
 
 
-router.post('/', (req,res)=>{
-    res.json({
-        msg: 'POST /api/categorias'
-    })
-})
+router.post('/', [
+    validarJWT,
+    check('nombre', 'The name is required').not().isEmpty(),
+    validarCampos],
+    crearCategoria)
 
 
 router.put('/:id', (req,res)=>{

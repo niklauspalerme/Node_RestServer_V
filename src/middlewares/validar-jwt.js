@@ -56,7 +56,7 @@ const validarJWT = async  (req,res,next) =>{
 
         console.log(error)
         return res.status(500).json({
-            msg: "Internal Server Error"
+            msg: "Error with the token"
         })
         
     }
