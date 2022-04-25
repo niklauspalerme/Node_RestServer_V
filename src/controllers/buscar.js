@@ -2,6 +2,8 @@
 // Importaciones o Constantes
 
 const { ObjectId } = require('mongoose').Types;
+const { Categorias } = require('../models/categoria');
+const { Productos } = require('../models/producto');
 const { Usuarios } = require('../models/usuario');
 
 const coleccionesPermitidas = [
@@ -11,6 +13,12 @@ const coleccionesPermitidas = [
     'roles'
 ]
 
+
+/////////////////////////////////////////////////////////////
+// Funcines
+
+
+//#1
 const buscarUsuarios = async (termino = '', res) =>{
 
     const esMongoId = ObjectId.isValid(termino)
@@ -28,6 +36,7 @@ const buscarUsuarios = async (termino = '', res) =>{
     const usuarios = await Usuarios.find({
         $or: [{nombre: regex}, {correo: regex}],
         $and: [{estado: true}]
+
     })
 
     return res.json({
@@ -38,8 +47,58 @@ const buscarUsuarios = async (termino = '', res) =>{
 }
 
 
+//#2
+const buscarCategorias = async (termino = '', res) =>{
+
+
+    const esMongoId = ObjectId.isValid(termino)
+
+    if (esMongoId){
+        const categoria = await Categorias.findById(termino)
+        return res.json({
+           "msg": "GET /api/buscar/:coleccion/:termino",
+           categoria
+        })
+    }
+
+    const regex =  new RegExp(termino, 'i')
+
+    const categorias = await Categorias.find({nombre: regex, estado: true})
+
+    return res.json({
+        "msg": "GET /api/buscar/:coleccion/:termino",
+        categorias
+     })
+
+}
+
+
+//#3
+const buscarProductos = async (termino = '', res) =>{
+
+    const esMongoId = ObjectId.isValid(termino)
+
+    if (esMongoId){
+        const producto = await Productos.findById(termino)
+        return res.json({
+           "msg": "GET /api/buscar/:coleccion/:termino",
+           producto
+        })
+    }
+
+    const regex =  new RegExp(termino, 'i')
+
+    const productos = await Productos.find({nombre: regex, estado: true}).populate('categoria', 'nombre');
+
+    return res.json({
+        "msg": "GET /api/buscar/:coleccion/:termino",
+        productos
+     })
+
+}
+
 /////////////////////////////////////////////////////////////
-// Funciones del Buscar
+// Función Controlador de /api/buscar/:coleccion/:termino
 
 
 const buscar = (req,res) => {
@@ -59,14 +118,14 @@ const buscar = (req,res) => {
 
         switch (coleccion) {
             case 'productos':
-                
+                buscarProductos(termino,res);
                 break;
             case 'categorias':
-                
+                buscarCategorias(termino,res);
                 break;
                         
             case 'usuarios':
-                buscarUsuarios(termino, res)
+                buscarUsuarios(termino, res);
                 break;
 
             default:
