@@ -87,12 +87,41 @@ const crearCategoria = async (req,res)=>{
 }
 
 
+//#4
 const actualizarCategoria = async (req,res) =>{
+
+    console.log('PUT /api/categorias/:id');
+
+    const {id}= req.params;
+    const {estado, usuario, ...data} = req.body;
+
+    data.nombre = data.nombre.toUpperCase();
+    data.usuario = req.usuario._id;
+
+    const categoria = await Categorias.findByIdAndUpdate(id, data);
+
+    res.status(200).json({
+        msg: "PUT /api/categorias/:id",
+        categoria
+    })
+
+
 
 }
 
 
 const borrarCategoria = async (req,res) =>{
+
+    console.log('DELETE /api/categorias/:id');
+
+    const {id}= req.params;
+
+    const categoriaBorrada = await Categorias.findByIdAndUpdate(id, {estado: false}, {new: true});
+
+    res.status(200).json({
+        msg: "DELETE /api/categorias/:id",
+        categoriaBorrada
+    })
 
 }
 
