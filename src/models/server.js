@@ -62,7 +62,7 @@ class Server {
         this.app.use(this.path.usuario, require('../routes/user'));
         this.app.use(this.path.auth, require('../routes/auth'));
         this.app.use(this.path.categoria, require('../routes/categorias'));
-        this.app.use(this.path.producto, require('../routes/productos'));
+        this.app.use(this.path.producto, require('../routes/producto'));
 
     }
 

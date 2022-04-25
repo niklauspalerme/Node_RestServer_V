@@ -3,6 +3,7 @@
 
 
 const { Categorias } = require("../models/categoria");
+const { Productos } = require("../models/producto");
 const { Roles } = require("../models/role");
 const { Usuarios } = require('../models/usuario');
 
@@ -57,6 +58,19 @@ const existeCategoria = async (id) =>{
 }
 
 
+//#5
+
+const existeProducto = async (id) =>{
+
+    const existeProducto = await Productos.findById(id)
+
+    if (!existeProducto)
+        throw new Error ('The id doesnt exist. Please try with another one.');
+
+
+}
+
+
 
 
 
@@ -67,5 +81,6 @@ module.exports = {
     esRoleValido,
     validarEmailRepetido,
     existeUsuarioPorID,
-    existeCategoria
+    existeCategoria,
+    existeProducto
 }
