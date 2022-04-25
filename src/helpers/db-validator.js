@@ -2,6 +2,7 @@
 // Importaciones y Requeriments
 
 
+const { Categorias } = require("../models/categoria");
 const { Roles } = require("../models/role");
 const { Usuarios } = require('../models/usuario');
 
@@ -10,6 +11,8 @@ const { Usuarios } = require('../models/usuario');
 /////////////////////////////////////////////////////////////
 // Funciones
 
+
+//#1
 const esRoleValido = async(rol = '') => {
     const exisRol = await Roles.findOne({ rol });
 
@@ -19,6 +22,7 @@ const esRoleValido = async(rol = '') => {
 }
 
 
+//#2
 const validarEmailRepetido = async(correo = '') => {
 
 
@@ -28,6 +32,8 @@ const validarEmailRepetido = async(correo = '') => {
     }
 }
 
+
+//#3
 const existeUsuarioPorID = async (id) => {
 
     const existID = await Usuarios.findById(id);
@@ -38,11 +44,28 @@ const existeUsuarioPorID = async (id) => {
 }
 
 
+//#4
+const existeCategoria = async (id) =>{
+
+    const existeCategoria = await Categorias.findById(id);
+
+    if (!existeCategoria) {
+        throw new Error("The id doesn't exist. Please try with another one");
+    }
+
+
+}
+
+
+
+
+
 /////////////////////////////////////////////////////////////
 // Exportamos
 
 module.exports = {
     esRoleValido,
     validarEmailRepetido,
-    existeUsuarioPorID
+    existeUsuarioPorID,
+    existeCategoria
 }

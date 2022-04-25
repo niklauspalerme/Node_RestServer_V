@@ -27,6 +27,14 @@ const CategoriaSchema = Schema({
 
 })
 
+//Sobreescribimo el JSON de MongoDB del Schema
+//Para que solo retornemos los campos necesarios
+CategoriaSchema.methods.toJSON = function() {
+    const { __v, estado, ...data} = this.toObject();
+
+    return data
+}
+
 const Categorias = model('Categoria', CategoriaSchema);
 
 

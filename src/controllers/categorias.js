@@ -4,12 +4,58 @@
 const { Categorias } = require("../models/categoria");
 
 
-
-
-
 /////////////////////////////////////////////////////////////
 // Funciones del Comtrolador - Categoria
 
+
+//#1
+const obtenerCategorias = async (req,res) => {
+
+
+    console.log("GET /api/categorias");
+
+    const { page = '0', limit = '5', to = 0 , estado = true} = req.query
+
+    const [total,categorias] = await Promise.all([
+        Categorias.countDocuments({estado}),
+        Categorias.find({estado}).skip(to).limit(limit).populate('usuario', 'nombre')
+
+    ]);
+
+    res.status(200).json({
+        "Message": "GET /api/categorias",
+        total,
+        categorias
+    });
+
+}
+
+
+//#2
+const obtenerCategoria = async (req,res) =>{
+
+    try {
+
+        const {id} = req.params
+
+        const categoria = await Categorias.findById(id).populate('usuario', 'nombre');
+
+        res.status(200).json({
+            "Message": "GET /api/categorias/:id",
+            categoria
+        });
+        
+    } catch (error) {
+        
+        console.log(error);
+        res.status(500).json({
+            msg: "Internal Server Error"
+        });
+
+    }
+}
+
+//#3
 const crearCategoria = async (req,res)=>{
 
     const nombre = req.body.nombre.toUpperCase(); 
@@ -41,6 +87,14 @@ const crearCategoria = async (req,res)=>{
 }
 
 
+const actualizarCategoria = async (req,res) =>{
+
+}
+
+
+const borrarCategoria = async (req,res) =>{
+
+}
 
 
 
@@ -51,5 +105,9 @@ const crearCategoria = async (req,res)=>{
 
 
 module.exports={
-    crearCategoria
+    crearCategoria,
+    obtenerCategorias,
+    obtenerCategoria,
+    actualizarCategoria,
+    borrarCategoria
 }
