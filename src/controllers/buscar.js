@@ -15,8 +15,6 @@ const buscarUsuarios = async (termino = '', res) =>{
 
     const esMongoId = ObjectId.isValid(termino)
 
-    console.log("Aja");
-
     if (esMongoId){
         const usuario = await Usuarios.findById(termino)
         return res.json({
@@ -24,6 +22,18 @@ const buscarUsuarios = async (termino = '', res) =>{
            usuario
         })
     }
+
+    const regex =  new RegExp(termino, 'i')
+
+    const usuarios = await Usuarios.find({
+        $or: [{nombre: regex}, {correo: regex}],
+        $and: [{estado: true}]
+    })
+
+    return res.json({
+        "msg": "GET /api/buscar/:coleccion/:termino",
+        usuarios
+     })
 
 }
 
